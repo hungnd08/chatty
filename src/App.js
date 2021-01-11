@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Route,
     BrowserRouter as Router,
@@ -16,7 +16,15 @@ function PrivateRoute({ component: Component, authenticated, ...rest }) {
     return (
         <Route
             {...rest}
-            render={(props) => authenticated === true ? <Component {...props} /> : <Redirect to={{ pathname: '/login', state: { from: props.location } }} />}
+            render={props =>
+            authenticated === true ? (
+                <Component {...props} />
+            ) : (
+                <Redirect
+                    to={{ pathname: "/login", state: { from: props.location } }}
+                />
+                )
+            }
         />
     );
 }
@@ -25,7 +33,13 @@ function PublicRoute({ component: Component, authenticated, ...rest }) {
     return (
         <Route
             {...rest}
-            render={(props) => authenticated === false ? <Component {...props} /> : <Redirect to='/chat' />}
+            render={props =>
+            authenticated === false ? (
+                <Component {...props} />
+            ) : (
+                <Redirect to="/chat" />
+                )
+            }
         />
     );
 }
@@ -47,7 +61,11 @@ function App() {
     });
 
     return (
-        loading === true ? <h2>Loading...</h2> : (
+        loading === true ? (
+        <div className="spinner-border text-success" role="status">
+            <span className="sr-only">Loading...</span>
+        </div> 
+        ) : (
             <Router>
                 <Switch>
                     {/* <Route exact path="/" component={Home}></Route> */}

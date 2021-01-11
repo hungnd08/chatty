@@ -17,12 +17,15 @@ export default function Signup() {
     };
 
     const handleSubmit =  async (event) => {
-        event.prventDefault();
-        setState({error: ''});
+        event.preventDefault();
+        setState((prevProps) => ({
+            ...prevProps,
+            error: ''
+        }));
         try {
             await signup(state.email, state.password);
         } catch(error) {
-            setState({error: error.message});
+            setState({ error: error.message });
         }
     };
 

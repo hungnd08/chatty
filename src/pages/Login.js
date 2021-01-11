@@ -18,7 +18,10 @@ export default function Login() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        setState({ error: "" });
+        setState((prevProps) => ({
+            ...prevProps,
+            error: ''
+        }));
         try {
             await signin(state.email, state.password);
         } catch(error) {
