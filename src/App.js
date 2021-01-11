@@ -5,12 +5,12 @@ import {
     Switch,
     Redirect,
 } from "react-router-dom";
-import Home from './pages/Home';
+// import Home from './pages/Home';
 import Chat from './pages/Chat';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import { auth } from './services/firebase';
-import './App.css';
+import './styles.css';
 
 function PrivateRoute({ component: Component, authenticated, ...rest }) {
     return (
@@ -45,11 +45,12 @@ function App() {
             }
         });
     });
+
     return (
         loading === true ? <h2>Loading...</h2> : (
             <Router>
                 <Switch>
-                    <Route exact path="/" component={Home}></Route>
+                    {/* <Route exact path="/" component={Home}></Route> */}
                     <PrivateRoute path="/chat" authenticated={authenticated} component={Chat}></PrivateRoute>
                     <PublicRoute path="/signup" authenticated={authenticated} component={Signup}></PublicRoute>
                     <PublicRoute path="/login" authenticated={authenticated} component={Login}></PublicRoute>
