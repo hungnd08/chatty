@@ -5,7 +5,7 @@ import {
     Switch,
     Redirect,
 } from "react-router-dom";
-// import Home from './pages/Home';
+import Home from './pages/Home';
 import Chat from './pages/Chat';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
@@ -68,7 +68,7 @@ function App() {
         ) : (
             <Router>
                 <Switch>
-                    {/* <Route exact path="/" component={Home}></Route> */}
+                    <Route exact path="/" component={Home}></Route>
                     <PrivateRoute path="/chat" authenticated={authenticated} component={Chat}></PrivateRoute>
                     <PublicRoute path="/signup" authenticated={authenticated} component={Signup}></PublicRoute>
                     <PublicRoute path="/login" authenticated={authenticated} component={Login}></PublicRoute>
