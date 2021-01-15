@@ -8,52 +8,80 @@ export default function Chat() {
         chats: [],
         content: '',
         readError: null,
-        writeError: null
+        writeError: null,
+        loadingChats: false
     });
 
-    useEffect(async () => {
+    const myRef = useRef();
+
+    useEffect(() => {
         setState((prevProps) => ({
             ...prevProps,
-            readError: null
+            readError: null,
+            loadingChats: true
         }));
+        const chatArea = myRef.current;
         try {
             db.ref("chats").on("value", snapshot => {
                 let chats = [];
                 snapshot.forEach((snap) => {
                     chats.push(snap.val());
                 });
+                chats.sort((a, b) => { return a.timestamp - b.timestamp })
                 setState((prevProps) => ({
                     ...prevProps,
-                    chats
+                    chats,
+                    loadingChats: false
                 }));
+                chatArea.scrollBy(0, chatArea.scrollHeight);
             })
         } catch(error) {
             setState((prevProps) => ({
                 ...prevProps,
-                readError: error.message
+                readError: error.message,
+                loadingChats: false
             }));
         }
     }, []);
 
-    function handleChange(event) {
+    const handleChange = (event) => {
         setState((prevProps) => ({
             ...prevProps,
             content: event.target.value
         }));
     }
 
-    function handleSubmit(event) {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         setState((prevProps) => ({
             ...prevProps,
             writeError: null
         }));
-        // const chatArea = 
+        const chatArea = myRef.current;
+        try {
+            await db.ref("chats").push({
+                content: state.content,
+                timestamp: Date.now(),
+                uid: state.user.uid
+            });
+            setState((prevProps) => ({
+                ...prevProps,
+                content: ''
+            }));
+            chatArea.scrollBy(0, chatArea.scrollHeight);
+
+        } catch (error) {
+            setState((prevProps) => ({
+                ...prevProps,
+                writeError: error.message
+            }));
+        }
     }
 
-    function formatTime(timestamp) {
+    const formatTime = (timestamp) => {
         const d = new Date(timestamp);
-        const time = ``;
+        const time = `${d.getDate()}/${(d.getMonth()+1)}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
+        return time;
     }
 
     return (
